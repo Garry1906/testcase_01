@@ -7,6 +7,8 @@ Tests the Settings class in isolation — no external services.
 import importlib
 import warnings
 
+import pytest
+
 
 class TestSettingsDefaults:
     """Verify default field values."""
@@ -64,3 +66,24 @@ class TestDatabaseUrlValidator:
                 openai_api_key="sk-test",
             )
         assert not any("placeholder" in str(warning.message).lower() for warning in w)
+
+
+class TestOpenAIKeyValidator:
+    @pytest.mark.parametrize("key", ["", "   "])
+    def test_invalid_key_raises(self, key):
+        from pydantic import ValidationError
+        from app.config import Settings
+
+        with pytest.raises(ValidationError):
+            Settings(database_url="x", openai_api_key=key)
+
+    def test_valid_key_passes(self):
+        from app.config import Settings
+
+        assert (
+            Settings(
+                database_url="x",
+                openai_api_key="sk-valid",  # pragma: allowlist secret
+            ).openai_api_key
+            == "sk-valid"
+        )

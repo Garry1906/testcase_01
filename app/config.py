@@ -22,6 +22,13 @@ class Settings(BaseSettings):
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 
+    @field_validator("openai_api_key")
+    @classmethod
+    def openai_api_key_must_not_be_empty(cls, v: str) -> str:
+        if not v or not v.strip():
+            raise ValueError("openai_api_key must not be empty or whitespace-only")
+        return v
+
     @field_validator("database_url")
     @classmethod
     def database_url_must_not_be_placeholder(cls, v: str) -> str:
