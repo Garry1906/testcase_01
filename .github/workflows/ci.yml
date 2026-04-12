@@ -69,3 +69,39 @@ jobs:
         run: pytest tests/ --cov=app --cov-report=term-missing -v
         env:
           PYTHONPATH: ${{ github.workspace }}
+          DATABASE_URL: postgresql://test:test@localhost:5432/testdb
+          OPENAI_API_KEY: sk-test-key
+
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Node.js dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: Integration tests (TypeScript)
+        run: npx jest --testPathPattern="tests/integration" --forceExit
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/testdb
+          OPENAI_API_KEY: sk-test-key
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt pytest
+
+      - name: Integration tests (Python)
+        run: pytest tests/integration/ -v --tb=short
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          DATABASE_URL: postgresql://test:test@localhost:5432/testdb
+          OPENAI_API_KEY: sk-test-key
