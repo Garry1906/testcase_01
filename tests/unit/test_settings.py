@@ -3,6 +3,7 @@ Unit tests for app.config.Settings.
 
 Tests the Settings class in isolation — no external services.
 """
+
 import importlib
 import warnings
 
@@ -12,21 +13,25 @@ class TestSettingsDefaults:
 
     def test_default_port_is_8000(self):
         import app.config
+
         importlib.reload(app.config)
         assert app.config.settings.python_port == 8000
 
     def test_debug_defaults_to_false(self):
         import app.config
+
         importlib.reload(app.config)
         assert app.config.settings.debug is False
 
     def test_log_level_defaults_to_debug(self):
         import app.config
+
         importlib.reload(app.config)
         assert app.config.settings.python_log_level == "DEBUG"
 
     def test_host_defaults_to_all_interfaces(self):
         import app.config
+
         importlib.reload(app.config)
         assert app.config.settings.python_host == "0.0.0.0"
 

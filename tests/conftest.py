@@ -6,6 +6,7 @@ RULES:
 2. Fixtures are the SINGLE SOURCE OF TRUTH for test dependencies
 3. Add new fixtures here, not in individual test files
 """
+
 import sys
 import os
 from pathlib import Path

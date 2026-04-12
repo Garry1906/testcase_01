@@ -105,3 +105,38 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}
           DATABASE_URL: postgresql://test:test@localhost:5432/testdb
           OPENAI_API_KEY: sk-test-key
+
+  validate-pr-title:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            chore
+            docs
+            test
+            refactor
+            ci
+            build
+          requireScope: false
+
+  validate-branch-name:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Validate branch name
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          if echo "$BRANCH" | grep -qE '^(feat|fix|chore|docs|test|refactor|ci|build)\/[a-z0-9]+-[a-z0-9-]+$'; then
+            echo "Branch name '$BRANCH' is valid"
+          else
+            echo "ERROR: Branch name '$BRANCH' must match pattern: <type>/<issue>-<description>"
+            echo "Valid types: feat, fix, chore, docs, test, refactor, ci, build"
+            echo "Example: feat/42-add-login or fix/7-null-pointer"
+            exit 1
+          fi

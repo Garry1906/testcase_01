@@ -1,0 +1,60 @@
+# .pre-commit-config.yaml — Python Governance (Layers 0-6)
+# Mault Production-Readiness Kit — Step 6
+#
+# Install: bash scripts/install-precommit-hooks.sh
+# Run all: pre-commit run --all-files -c .pre-commit-config.yaml
+
+fail_fast: true
+
+repos:
+  # =========================================================================
+  # LAYER 0: CONFIG FILE VALIDATION (Fail-First Safety)
+  # =========================================================================
+  - repo: local
+    hooks:
+      - id: config-validation
+        name: Config File Validation (Layer 0)
+        entry: bash scripts/validate-configs-py.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+  # =========================================================================
+  # LAYERS 1-4: STANDARD FILE HYGIENE
+  # =========================================================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^(\.mault/|coverage/)
+      - id: end-of-file-fixer
+        exclude: ^(\.mault/|coverage/)
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: check-merge-conflict
+      - id: no-commit-to-branch
+        args: [--branch, master, --branch, main]
+
+  # =========================================================================
+  # LAYERS 2-4: PYTHON LINTING (ruff — replaces black + flake8 + isort)
+  # =========================================================================
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+        files: \.py$
+      - id: ruff-format
+        files: \.py$
+
+  # =========================================================================
+  # LAYER 6: SECURITY — SECRET DETECTION
+  # =========================================================================
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: [--baseline, .secrets.baseline]
+        exclude: package-lock\.json|\.env$

@@ -7,6 +7,7 @@ Real integration tests belong alongside business logic.
 def test_settings_class_exists() -> None:
     """Verify the app package is importable."""
     import importlib.util
+
     spec = importlib.util.find_spec("app")
     assert spec is not None, "app package should be discoverable on the path"
 

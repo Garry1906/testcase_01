@@ -4,6 +4,7 @@ Import settings at the top of your Python entry point.
 
 Install: pip install pydantic pydantic-settings
 """
+
 from pydantic_settings import BaseSettings
 from pydantic import field_validator
 
@@ -26,7 +27,10 @@ class Settings(BaseSettings):
     def database_url_must_not_be_placeholder(cls, v: str) -> str:
         if "your-" in v or "password@localhost" in v and "user:" in v:
             import warnings
-            warnings.warn("DATABASE_URL appears to be a placeholder value", stacklevel=2)
+
+            warnings.warn(
+                "DATABASE_URL appears to be a placeholder value", stacklevel=2
+            )
         return v
 
 

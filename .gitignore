@@ -59,3 +59,5 @@ npm-debug.log*
 
 # Mault working dir (volatile state, not source)
 .mault/
+!.mault/*.proof
+!.mault/pre-commit-manifest.json

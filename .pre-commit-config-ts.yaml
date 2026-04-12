@@ -1,0 +1,59 @@
+# .pre-commit-config-ts.yaml — TypeScript Governance (Layers 0, 1, 3, 6)
+# Mault Production-Readiness Kit — Step 6
+#
+# Install: bash scripts/install-precommit-hooks.sh
+# Run all: pre-commit run --all-files -c .pre-commit-config-ts.yaml
+
+fail_fast: true
+
+repos:
+  # =========================================================================
+  # LAYER 0: CONFIG FILE VALIDATION (Fail-First Safety)
+  # =========================================================================
+  - repo: local
+    hooks:
+      - id: config-validation-ts
+        name: Config File Validation — TypeScript (Layer 0)
+        entry: bash scripts/validate-configs-ts.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+  # =========================================================================
+  # LAYER 1: TYPESCRIPT COMPILATION
+  # =========================================================================
+  - repo: local
+    hooks:
+      - id: typescript-compile
+        name: TypeScript Compilation Check (Layer 1)
+        entry: npx tsc --noEmit
+        language: system
+        files: \.(ts|tsx)$
+        pass_filenames: false
+        stages: [pre-commit]
+
+  # =========================================================================
+  # LAYER 3: TEST IMPACT ANALYSIS — run affected tests only
+  # =========================================================================
+  - repo: local
+    hooks:
+      - id: jest-tia
+        name: Jest TIA — Run Affected Tests (Layer 3)
+        entry: bash scripts/jest-tia.sh
+        language: system
+        files: \.(ts|tsx)$
+        pass_filenames: true
+        stages: [pre-commit]
+
+  # =========================================================================
+  # LAYER 6: SECURITY GATE — npm audit (non-blocking)
+  # =========================================================================
+  - repo: local
+    hooks:
+      - id: npm-audit
+        name: Security Audit — npm audit (Layer 6)
+        entry: bash scripts/npm-audit-check.sh
+        language: system
+        files: package\.json$
+        pass_filenames: false
+        stages: [pre-commit]
