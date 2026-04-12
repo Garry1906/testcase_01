@@ -1,0 +1,31 @@
+# .gitleaks.toml — Gitleaks secret detection configuration
+# https://github.com/gitleaks/gitleaks
+
+title = "Mault Governance — Secret Detection"
+
+[extend]
+useDefault = true
+
+[[allowlist.regexes]]
+# Test credentials are intentional false positives
+description = "Test database credentials"
+regex = '''postgresql://test:test@localhost'''
+
+[[allowlist.regexes]]
+description = "Test OpenAI key placeholder"
+regex = '''sk-test-key'''
+
+[[allowlist.regexes]]
+description = "Secrets baseline file"
+regex = '''.secrets.baseline'''
+
+[[allowlist.paths]]
+description = "Ignore test fixtures and examples"
+path = '''tests/fixtures/'''
+
+[[allowlist.paths]]
+description = "Ignore env example files"
+path = '''.env.example'''
+
+[[allowlist.commits]]
+description = "Commits with only test credentials"

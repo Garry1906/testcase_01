@@ -1,0 +1,75 @@
+{
+  "step": 8,
+  "title": "Governance Testing",
+  "generated_at": "2026-04-12T00:00:00Z",
+  "stacks": ["typescript", "python"],
+  "scripts": {
+    "typescript": [
+      "scripts/governance/guardrails-check.js",
+      "scripts/governance/check-any-usage.js",
+      "scripts/governance/check-silent-catches.js",
+      "scripts/governance/check-eslint-disable.js",
+      "scripts/governance/check-mock-tax.js",
+      "scripts/governance/check-adversarial-mocks.js",
+      "scripts/governance/verify-integration-pairing.js",
+      "scripts/governance/verify-behavioral-pairing.js",
+      "scripts/governance/check-hallucinations.js",
+      "scripts/governance/check-security-critical.js",
+      "scripts/governance/check-circular-deps.js",
+      "scripts/governance/check-duplicate-code.js",
+      "scripts/governance/check-zod-boundaries.js",
+      "scripts/governance/check-mutation-score.js",
+      "scripts/governance/guardrails-check.js",
+      "scripts/governance/code-health-check.js",
+      "scripts/governance/check-per-file-baseline.mjs",
+      "scripts/governance/check-skipped-tests.js",
+      "scripts/governance/collect-metrics.js",
+      "scripts/governance/report-metrics.js",
+      "scripts/governance/generate-baselines.js"
+    ],
+    "python": [
+      "scripts/governance/guardrails_check.py",
+      "scripts/governance/check_type_holes.py",
+      "scripts/governance/check_silent_catches.py",
+      "scripts/governance/check_noqa.py",
+      "scripts/governance/check_mock_tax.py",
+      "scripts/governance/check_mock_conformance.py",
+      "scripts/governance/verify_integration_pairing.py",
+      "scripts/governance/verify_behavioral_pairing.py",
+      "scripts/governance/check_hallucinations_pypi.py",
+      "scripts/governance/check_security_critical.py",
+      "scripts/governance/check_circular_deps.py",
+      "scripts/governance/duplication_check.py",
+      "scripts/governance/check_pydantic_boundaries.py",
+      "scripts/governance/check_mutation_score.py",
+      "scripts/governance/code_health_check.py",
+      "scripts/governance/check_per_file_baseline.py",
+      "scripts/governance/check_skipped_tests.py",
+      "scripts/governance/collect_metrics.py",
+      "scripts/governance/report_metrics.py",
+      "scripts/governance/test_impact_analysis.py"
+    ]
+  },
+  "baselines": [
+    ".memory-layer/baselines/type-safety.json",
+    ".memory-layer/baselines/mock-tax.json",
+    ".memory-layer/baselines/coverage.json",
+    ".memory-layer/baselines/clone-count.json",
+    ".memory-layer/baselines/guardrails.json",
+    ".memory-layer/baselines/code-health.json"
+  ],
+  "ci_jobs": ["gitleaks", "package-audit", "governance"],
+  "config": {
+    "gitleaks": ".gitleaks.toml",
+    "pre_commit_python": ".pre-commit-config.yaml",
+    "pre_commit_ts": ".pre-commit-config-ts.yaml"
+  },
+  "philosophies": {
+    "iron_dome": "any count ratchet, silent catches ratchet",
+    "rising_tide": "test LOC ≤ baseline ratio × source LOC",
+    "buddy_system": "new source files need integration tests",
+    "amnesty_protocol": "legacy violations grandfathered at baseline",
+    "coverage_fortress": "per-file ratchet ±0.2%, 80% floor for new files",
+    "srp_enforcement": "file ≤600 LOC, function ≤50 LOC, CC ≤15"
+  }
+}

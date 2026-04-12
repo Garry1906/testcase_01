@@ -1,5 +1,5 @@
-# .pre-commit-config-ts.yaml — TypeScript Governance (Layers 0, 1, 3, 6)
-# Mault Production-Readiness Kit — Step 6
+# .pre-commit-config-ts.yaml — TypeScript Governance (Layers 0, 1, 3, 6, 8)
+# Mault Production-Readiness Kit — Steps 6 + 8
 #
 # Install: bash scripts/install-precommit-hooks.sh
 # Run all: pre-commit run --all-files -c .pre-commit-config-ts.yaml
@@ -55,5 +55,62 @@ repos:
         entry: bash scripts/npm-audit-check.sh
         language: system
         files: package\.json$
+        pass_filenames: false
+        stages: [pre-commit]
+
+  # =========================================================================
+  # LAYER 8: GOVERNANCE — TypeScript Quality Ratchets
+  # =========================================================================
+  - repo: local
+    hooks:
+      - id: ts-guardrails
+        name: SRP Guardrails — TypeScript (Layer 8)
+        entry: node scripts/governance/guardrails-check.js
+        language: system
+        files: \.(ts|tsx)$
+        pass_filenames: true
+        stages: [pre-commit]
+
+      - id: ts-any-usage
+        name: Iron Dome — TypeScript any usage (Layer 8)
+        entry: node scripts/governance/check-any-usage.js
+        language: system
+        files: \.(ts|tsx)$
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: ts-silent-catches
+        name: Iron Dome — TypeScript silent catches (Layer 8)
+        entry: node scripts/governance/check-silent-catches.js
+        language: system
+        files: \.(ts|tsx|js)$
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: ts-mock-tax
+        name: Rising Tide — TypeScript mock tax (Layer 8)
+        entry: node scripts/governance/check-mock-tax.js
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: ts-skipped-tests
+        name: Test Discipline — TypeScript skipped tests (Layer 8)
+        entry: node scripts/governance/check-skipped-tests.js
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: ts-circular-deps
+        name: Dependency Health — TypeScript circular imports (Layer 8)
+        entry: node scripts/governance/check-circular-deps.js
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: ts-security-critical
+        name: Security Review — TypeScript @security-critical (Layer 8)
+        entry: node scripts/governance/check-security-critical.js
+        language: system
         pass_filenames: false
         stages: [pre-commit]

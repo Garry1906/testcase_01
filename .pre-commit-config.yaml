@@ -1,5 +1,5 @@
-# .pre-commit-config.yaml — Python Governance (Layers 0-6)
-# Mault Production-Readiness Kit — Step 6
+# .pre-commit-config.yaml — Python Governance (Layers 0-8)
+# Mault Production-Readiness Kit — Steps 6 + 8
 #
 # Install: bash scripts/install-precommit-hooks.sh
 # Run all: pre-commit run --all-files -c .pre-commit-config.yaml
@@ -58,3 +58,65 @@ repos:
       - id: detect-secrets
         args: [--baseline, .secrets.baseline]
         exclude: package-lock\.json|\.env$
+
+  # =========================================================================
+  # LAYER 8: GOVERNANCE — Python Quality Ratchets
+  # =========================================================================
+  - repo: local
+    hooks:
+      - id: py-guardrails
+        name: SRP Guardrails — Python (Layer 8)
+        entry: python3 scripts/governance/guardrails_check.py
+        language: system
+        files: \.py$
+        pass_filenames: true
+        stages: [pre-commit]
+
+      - id: py-type-holes
+        name: Iron Dome — Python type holes (Layer 8)
+        entry: python3 scripts/governance/check_type_holes.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: py-silent-catches
+        name: Iron Dome — Python silent catches (Layer 8)
+        entry: python3 scripts/governance/check_silent_catches.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: py-noqa
+        name: Escape Hatch — Python noqa (Layer 8)
+        entry: python3 scripts/governance/check_noqa.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: py-mock-tax
+        name: Rising Tide — Python mock tax (Layer 8)
+        entry: python3 scripts/governance/check_mock_tax.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: py-skipped-tests
+        name: Test Discipline — Python skipped tests (Layer 8)
+        entry: python3 scripts/governance/check_skipped_tests.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: py-circular-deps
+        name: Dependency Health — Python circular imports (Layer 8)
+        entry: python3 scripts/governance/check_circular_deps.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: py-security-critical
+        name: Security Review — Python @security-critical (Layer 8)
+        entry: python3 scripts/governance/check_security_critical.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]

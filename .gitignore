@@ -9,6 +9,8 @@
 .memory-layer/logs/
 .memory-layer/reports/
 .memory-layer/archive/
+!.memory-layer/baselines/
+!.memory-layer/baselines/*.json
 
 # Node.js / TypeScript
 node_modules/

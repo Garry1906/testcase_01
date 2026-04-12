@@ -106,6 +106,121 @@ jobs:
           DATABASE_URL: postgresql://test:test@localhost:5432/testdb
           OPENAI_API_KEY: sk-test-key
 
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Gitleaks secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+        continue-on-error: false
+
+  package-audit:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for dependency file changes
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '(package\.json|requirements\.txt|pyproject\.toml)' || true)
+          if [ -n "$CHANGED" ]; then
+            echo "⚠ Dependency files changed in this PR:"
+            echo "$CHANGED"
+            echo "DEPENDENCY_CHANGES=true" >> $GITHUB_ENV
+          else
+            echo "✓ No dependency files changed"
+            echo "DEPENDENCY_CHANGES=false" >> $GITHUB_ENV
+          fi
+
+      - uses: actions/setup-node@v4
+        if: env.DEPENDENCY_CHANGES == 'true'
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: npm audit (high severity)
+        if: env.DEPENDENCY_CHANGES == 'true'
+        run: |
+          npm ci --prefer-offline --no-audit --no-fund
+          npm audit --audit-level=high --omit=dev || echo "⚠ npm audit found issues — review required"
+
+      - uses: actions/setup-python@v5
+        if: env.DEPENDENCY_CHANGES == 'true'
+        with:
+          python-version: '3.12'
+
+      - name: pip-audit (Python)
+        if: env.DEPENDENCY_CHANGES == 'true'
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt --desc on || echo "⚠ pip-audit found issues — review required"
+
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Node.js dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: SRP Guardrails (TypeScript)
+        run: node scripts/governance/guardrails-check.js
+
+      - name: SRP Guardrails (Python)
+        run: python3 scripts/governance/guardrails_check.py app/config.py app/__init__.py
+
+      - name: Iron Dome — TypeScript any usage
+        run: node scripts/governance/check-any-usage.js
+
+      - name: Iron Dome — Python type holes
+        run: python3 scripts/governance/check_type_holes.py
+
+      - name: Rising Tide — Mock Tax (TypeScript)
+        run: node scripts/governance/check-mock-tax.js
+
+      - name: Rising Tide — Mock Tax (Python)
+        run: python3 scripts/governance/check_mock_tax.py
+
+      - name: Test Discipline — Skipped tests (TypeScript)
+        run: node scripts/governance/check-skipped-tests.js
+
+      - name: Test Discipline — Skipped tests (Python)
+        run: python3 scripts/governance/check_skipped_tests.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+
+      - name: Dependency Health — Circular imports (TypeScript)
+        run: node scripts/governance/check-circular-deps.js
+
+      - name: Dependency Health — Circular imports (Python)
+        run: python3 scripts/governance/check_circular_deps.py
+
+      - name: Collect governance metrics
+        run: |
+          node scripts/governance/collect-metrics.js
+          node scripts/governance/report-metrics.js
+
   validate-pr-title:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
