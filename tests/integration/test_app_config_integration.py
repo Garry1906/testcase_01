@@ -4,7 +4,6 @@ Integration tests: app.config module with real environment loading.
 Tests the full Settings lifecycle — module load, env resolution, and validation.
 """
 import importlib
-import pytest
 
 
 class TestSettingsIntegration:

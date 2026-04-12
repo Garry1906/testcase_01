@@ -5,7 +5,6 @@ Tests the Settings class in isolation — no external services.
 """
 import importlib
 import warnings
-import pytest
 
 
 class TestSettingsDefaults:

@@ -10,7 +10,6 @@ import sys
 import os
 from pathlib import Path
 import pytest
-from unittest.mock import create_autospec
 
 # Ensure the project root is on the path so `app` is importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
