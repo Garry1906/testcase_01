@@ -1,0 +1,17 @@
+{
+  "maultRole": "worker",
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Task(*)",
+      "NotebookEdit(*)"
+    ],
+    "deny": []
+  }
+}
