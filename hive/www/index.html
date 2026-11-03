@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The Hive</title>
+  <meta name="description" content="A meeting place where Claude, Perplexity and Copilot work together for you.">
+  <meta name="theme-color" content="#14110A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="The Hive">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <h1>The Hive</h1>
+    </div>
+    <div class="council" id="council" aria-label="Hive members"></div>
+  </header>
+
+  <main>
+    <!-- HIVE: the meeting room -->
+    <section id="view-hive" class="view active" aria-label="Meeting room">
+      <div id="feed" class="feed" aria-live="polite">
+        <div class="welcome" id="welcome">
+          <div class="welcome-cells" id="welcome-cells"></div>
+          <h2>Bring the Hive a task.</h2>
+          <p>Your AIs will each propose an approach, talk it through, vote on one plan,
+             check it with you, and then build it together.</p>
+          <div class="chips" id="examples"></div>
+          <p class="hint" id="demo-hint"></p>
+        </div>
+      </div>
+      <form id="composer" class="composer" autocomplete="off">
+        <textarea id="task" rows="1" placeholder="What should the Hive work on?" aria-label="Task"></textarea>
+        <button type="submit" id="send" class="btn primary" aria-label="Send to the Hive">Send</button>
+      </form>
+    </section>
+
+    <!-- CONNECT: sign in to each account -->
+    <section id="view-connect" class="view" aria-label="Connect accounts">
+      <div class="page">
+        <h2>Connect your accounts</h2>
+        <p class="lead">Sign in to each account, copy its key, and paste it here once.
+          Keys are stored only on this phone and are sent only to that member's own service.</p>
+        <div id="connect-cards"></div>
+
+        <h3>Chair</h3>
+        <p class="lead">The chair drafts the consensus plan and assembles the final result.</p>
+        <div class="seg" id="chair-seg" role="radiogroup" aria-label="Chair"></div>
+
+        <h3>Your other phone</h3>
+        <p class="lead">Copy a setup code here, then paste it into the Hive on your other phone
+          so you only sign in once. The code contains your keys — send it only to yourself.</p>
+        <div class="row">
+          <button class="btn" id="copy-setup" type="button">Copy setup code</button>
+          <button class="btn" id="paste-setup" type="button">Paste setup code</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEMORY: what the Hive knows you like + past meetings -->
+    <section id="view-memory" class="view" aria-label="Memory">
+      <div class="page">
+        <h2>What the Hive knows you like</h2>
+        <p class="lead">Every member reads these before each meeting. Your ratings after each
+          meeting add to this list.</p>
+        <form id="pref-form" class="row">
+          <input id="pref-input" placeholder="e.g. Keep answers short. Prefer free tools." aria-label="New preference">
+          <button class="btn" type="submit">Add</button>
+        </form>
+        <ul id="prefs" class="list"></ul>
+
+        <h3>Past meetings</h3>
+        <ul id="history" class="list"></ul>
+        <button class="btn danger" id="clear-history" type="button">Clear meeting history</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabs" aria-label="Sections">
+    <button class="tab active" data-view="hive" type="button"><span class="ti ti-hive"></span>Hive</button>
+    <button class="tab" data-view="connect" type="button"><span class="ti ti-connect"></span>Connect</button>
+    <button class="tab" data-view="memory" type="button"><span class="ti ti-memory"></span>Memory</button>
+  </nav>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

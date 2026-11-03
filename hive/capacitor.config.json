@@ -1,0 +1,8 @@
+{
+  "appId": "app.thehive.local",
+  "appName": "The Hive",
+  "webDir": "www",
+  "plugins": {
+    "CapacitorHttp": { "enabled": true }
+  }
+}

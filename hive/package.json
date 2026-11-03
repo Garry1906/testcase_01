@@ -1,0 +1,18 @@
+{
+  "name": "the-hive",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Hive — a meeting place where Claude, Perplexity and Copilot work together for you.",
+  "scripts": {
+    "serve": "npx --yes serve www -l 8080",
+    "android": "npx cap add android && npx cap sync android && npx cap open android",
+    "ios": "npx cap add ios && npx cap sync ios && npx cap open ios",
+    "sync": "npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/cli": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/ios": "^7.0.0"
+  }
+}
