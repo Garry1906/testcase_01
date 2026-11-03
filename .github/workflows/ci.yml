@@ -33,7 +33,7 @@ jobs:
           cache: 'pip'
 
       - name: Install Python dependencies
-        run: pip install -r requirements.txt ruff
+        run: pip install -r requirements.txt ruff==0.11.4  # same version as .pre-commit-config.yaml
 
       - name: Lint (Python/ruff)
         run: ruff check .

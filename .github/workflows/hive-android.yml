@@ -37,14 +37,10 @@ jobs:
       - name: Create Android project
         run: npx cap add android && npx cap sync android
 
+      # Sources live in hive/assets: icon-only, icon-foreground (transparent,
+      # inside the adaptive-icon safe zone) and icon-background.
       - name: Use the Hive icon
-        continue-on-error: true
-        run: |
-          mkdir -p assets
-          cp www/icons/icon-1024.png assets/icon-only.png
-          cp www/icons/icon-1024.png assets/icon-foreground.png
-          npx --yes @capacitor/assets@3 generate --android \
-            --iconBackgroundColor '#14110A' --iconBackgroundColorDark '#14110A'
+        run: npx --yes @capacitor/assets@3 generate --android
 
       - name: Build APK
         working-directory: hive/android
