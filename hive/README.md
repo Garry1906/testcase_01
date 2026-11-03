@@ -47,8 +47,9 @@ open **Connect → Paste setup code**. The code contains your keys, so send it o
 GitHub builds the app file for you automatically (`.github/workflows/hive-android.yml`).
 You don't need Android Studio.
 
-1. On GitHub, open the repo → **Actions** → **Hive — Android app** → the latest green run.
-2. Under **Artifacts**, download **TheHive-android** on your S25. It's a zip; open it to get `TheHive.apk`.
+1. On your S25, open this link in Chrome or Samsung Internet. No GitHub sign-in needed:
+   https://github.com/Garry1906/testcase_01/releases/download/hive-latest/TheHive.apk
+2. When the download finishes, open it from the notification or from **My Files → Downloads**.
 3. Tap `TheHive.apk`. If asked, allow **My Files** (or Chrome) to **Install unknown apps**.
    If Samsung's **Auto Blocker** is on, turn it off for the install (Settings → Security and privacy → Auto Blocker), then turn it back on.
 4. Open **The Hive** from your apps.
