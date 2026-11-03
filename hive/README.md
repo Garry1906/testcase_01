@@ -42,27 +42,44 @@ open **Connect → Paste setup code**. The code contains your keys, so send it o
 
 ## Installing on your phones
 
-### Option A: home-screen app (quickest, works on iPhone and Android)
+### Samsung Galaxy S25 Ultra: real Android app
 
-Host the `www/` folder anywhere that serves HTTPS, for example GitHub Pages pointed at
-`hive/www`. Then:
-- **iPhone:** open it in Safari → Share → **Add to Home Screen**
-- **Android:** open it in Chrome → ⋮ → **Install app**
+GitHub builds the app file for you automatically (`.github/workflows/hive-android.yml`).
+You don't need Android Studio.
 
-After the first load it opens offline like a normal app. **Limitation:** inside a browser,
-some providers may block direct calls from a web page. Claude's API allows them; Perplexity's
-and GitHub's may not. If one shows "Couldn't reach the service", use Option B.
+1. On GitHub, open the repo → **Actions** → **Hive — Android app** → the latest green run.
+2. Under **Artifacts**, download **TheHive-android** on your S25. It's a zip; open it to get `TheHive.apk`.
+3. Tap `TheHive.apk`. If asked, allow **My Files** (or Chrome) to **Install unknown apps**.
+   If Samsung's **Auto Blocker** is on, turn it off for the install (Settings → Security and privacy → Auto Blocker), then turn it back on.
+4. Open **The Hive** from your apps.
 
-### Option B: a real installed app (recommended; no such limits)
+The installed app uses native networking, so all three members can connect.
 
-The project is set up for [Capacitor](https://capacitorjs.com). Its native networking avoids
-the browser restriction above.
+### iPhone: home-screen app
+
+Apple only installs real apps that are built on a Mac or come from the App Store. On an
+iPhone, the Hive runs as a home-screen web app instead.
+
+1. One-time setup: on GitHub, open the repo → **Settings → Pages** → under **Source**, choose
+   **GitHub Actions**. After the Hive is merged into `master`, it publishes to
+   `https://garry1906.github.io/testcase_01/`. The page contains no keys.
+2. On your iPhone, open that address in **Safari** → **Share** → **Add to Home Screen**.
+3. Open **The Hive** from your home screen. After the first load it works offline.
+
+**Limitation on iPhone:** web apps can only reach services that accept calls from a web
+page. Claude does. Perplexity and GitHub Models may not. If a member shows "Couldn't reach
+the service", connect it on the Samsung instead, and use the iPhone for the members that work.
+
+To get a real iPhone app later, borrow a Mac and run `cd hive && npm install && npm run ios`.
+That opens Xcode; plug in the iPhone and press Run. With a free Apple ID the app expires after
+7 days; a $99/year Apple Developer account removes that limit.
+
+### Building the Android app yourself
 
 ```bash
 cd hive
 npm install
-npm run android   # opens Android Studio → Run on your phone, or Build → APK
-npm run ios       # needs a Mac with Xcode → Run on your iPhone
+npm run android   # opens Android Studio → Run, or Build → APK
 ```
 
 ## Files
